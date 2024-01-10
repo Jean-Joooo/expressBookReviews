@@ -4,6 +4,7 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
+
 public_users.post("/register", (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -18,15 +19,30 @@ public_users.post("/register", (req,res) => {
     return res.status(404).json({message: "Unable to register user."});
   });
 
-// Get the book list available in the shop
+  // Get the book list available in the shop
 public_users.get('/',function (req, res) {
     res.send(JSON.stringify(books,null,4));
 });
+
+// Promise callback version : this model could be useful for all //
+
+  fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/')
+    .then(response => {
+        console.log(response.status);
+    });
+    
 
 // Get book details based on ISBN
 public_users.get('/isbn/1',function (req, res) {
     res.send(JSON.stringify({"author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} }, null,4));
 });
+
+// Promise callback version : this model could be useful for all //
+
+fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/isbn/1/')
+    .then(response => {
+        console.log(response.status);
+    });
 
 public_users.get('/isbn/2',function (req, res) {
     res.send(JSON.stringify({"author": "Hans Christian Andersen","title": "Fairy tales", "reviews": {} }, null,4));
@@ -69,6 +85,14 @@ public_users.get('/author/ChinuaAchebe',function (req, res) {
     res.send(JSON.stringify({"author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} },null,4));
 });
 
+// Promise callback version : this model could be useful for all //
+
+fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/author/ChinuaAchebe')
+.then(response => {
+    console.log(response.status);
+});
+
+
 public_users.get('/author/HansChristianAndersen',function (req, res) {
     res.send(JSON.stringify({"author": "Hans Christian Andersen","title": "Fairy tales", "reviews": {} },null,4));
 });
@@ -110,6 +134,15 @@ public_users.get('/title/ThingsFallApart',function (req, res) {
     res.send(JSON.stringify({"author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} },null,4));
 });
 
+// Promise callback version : this model could be useful for all //
+
+
+fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/title/ThingsFallApart')
+.then(response => {
+    console.log(response.status);
+});
+
+
 public_users.get('/title/Fairytales',function (req, res) {
     res.send(JSON.stringify({"author": "Hans Christian Andersen","title": "Fairy tales", "reviews": {} },null,4));
 });
@@ -150,6 +183,14 @@ public_users.get('/title/MolloyMalone DiesThe Unnamablethetrilogy',function (req
 public_users.get('/review/1',function (req, res) {
     res.send(JSON.stringify({"reviews": {} },null,4));
 });
+
+// Promise callback version : this model could be useful for all //
+
+fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/review/1')
+    .then(response => {
+        console.log(response.status);
+    });
+
 public_users.get('/review/2',function (req, res) {
     res.send(JSON.stringify({"reviews": {} },null,4));
 
