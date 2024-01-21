@@ -116,15 +116,5 @@ public_users.get('/review/:isbn',function (req, res) {
     res.send(books[isbn]["reviews"])
   });
 
-public_users.get('/review/:isbn', async function (req, res) {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const isbn = req.params.isbn;
-      res.send(books[isbn]["reviews"])
-    } catch (error) {
-      console.error("Error while getting book details:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
 
 module.exports.general = public_users;
