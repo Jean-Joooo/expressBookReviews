@@ -17,223 +17,114 @@ public_users.post("/register", (req,res) => {
       }
     } 
     return res.status(404).json({message: "Unable to register user."});
-  });
+});
 
-  // Get the book list available in the shop
+// Get the book list available in the shop
 public_users.get('/',function (req, res) {
     res.send(JSON.stringify(books,null,4));
 });
 
-// Promise callback version : this model could be useful for all //
-
-  fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/')
-    .then(response => {
-        console.log(response.status);
-    });
+public_users.get('/', async function (req, res) {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      res.send(JSON.stringify({ books }, null, 4));
+    } catch (error) {
+      console.error("Error while getting book list:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
     
-
-// Get book details based on ISBN
-public_users.get('/isbn/1',function (req, res) {
-    res.send(JSON.stringify({"author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} }, null,4));
+// Get book details based on ISN
+public_users.get('/isbn/:isbn',function (req, res) {
+    const isbn = req.params.isbn;
+    res.send(books[isbn])
 });
 
-// Promise callback version : this model could be useful for all //
+public_users.get('/isbn/:isbn', async function (req, res) {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const isbn = req.params.isbn;
+      res.send(books[isbn])
+    } catch (error) {
+      console.error("Error while getting book details:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
 
-fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/isbn/1/')
-    .then(response => {
-        console.log(response.status);
-    });
-
-public_users.get('/isbn/2',function (req, res) {
-    res.send(JSON.stringify({"author": "Hans Christian Andersen","title": "Fairy tales", "reviews": {} }, null,4));
-});
-
-public_users.get('/isbn/3',function (req, res) {
-    res.send(JSON.stringify({"author": "Dante Alighieri","title": "The Divine Comedy", "reviews": {} }, null,4));
-});
-
-public_users.get('/isbn/4',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "The Epic Of Gilgamesh", "reviews": {} }, null,4));
-});
-
-public_users.get('/isbn/5',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "The Book Of Job", "reviews": {} }, null,4));
-});
-
-public_users.get('/isbn/6',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "One Thousand and One Nights", "reviews": {} }, null,4));
-});
-
-public_users.get('/isbn/7',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "NjSaga", "reviews": {} }, null,4));
-});
-
-public_users.get('/isbn/8',function (req, res) {
-    res.send(JSON.stringify({"author": "Jane Austen","title": "Pride and Prejudice", "reviews": {} }, null,4));
-});
-
-public_users.get('/isbn/9',function (req, res) {
-    res.send(JSON.stringify({"author": "Honoré de Balzac","title": "Le Le Père Goriot", "reviews": {} }, null,4));
-});
-
-public_users.get('/isbn/10',function (req, res) {
-    res.send(JSON.stringify({"author": "Samuel Beckett","title": "Molloy, Malone Dies, The Unnamable, the trilogy", "reviews": {} },null,4));
-});
-  
 // Get book details based on author
-public_users.get('/author/ChinuaAchebe',function (req, res) {
-    res.send(JSON.stringify({"author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} },null,4));
+public_users.get('/author/:author',function (req, res) {
+    const author = req.params.author;
+    let booksByAuthor = [];
+    for (let book in books) {
+        if (books[book].author === author) {
+            booksByAuthor.push(books[book]);
+        }
+    }
+    res.send(booksByAuthor);
 });
 
-// Promise callback version : this model could be useful for all //
+public_users.get('/author/:author', async function (req, res) {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const author = req.params.author;
+      let booksByAuthor = [];
+      for (let book in books) {
+          if (books[book].author === author) {
+              booksByAuthor.push(books[book]);
+          }
+      }
+      res.send(booksByAuthor);
+    } catch (error) {
+      console.error("Error while getting book details:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
 
-fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/author/ChinuaAchebe')
-.then(response => {
-    console.log(response.status);
+// Get book details based on title
+
+public_users.get('/title/:title',function (req, res) {  
+    const title = req.params.title;
+    let booksByTitle = [];
+    for (let book in books) {
+        if (books[book].title === title) {
+            booksByTitle.push(books[book]);
+        }
+    }
+    res.send(booksByTitle);
 });
 
+public_users.get('/title/:title', async function (req, res) {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const title = req.params.title;
+      let booksByTitle = [];
+      for (let book in books) {
+          if (books[book].title === title) {
+              booksByTitle.push(books[book]);
+          }
+      }
+      res.send(booksByTitle);
+    } catch (error) {
+      console.error("Error while getting book details:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
 
-public_users.get('/author/HansChristianAndersen',function (req, res) {
-    res.send(JSON.stringify({"author": "Hans Christian Andersen","title": "Fairy tales", "reviews": {} },null,4));
-});
+// Get book details based on review
+public_users.get('/review/:isbn',function (req, res) {
+    const isbn = req.params.isbn;
+    res.send(books[isbn]["reviews"])
+  });
 
-public_users.get('/author/DanteAlighieri',function (req, res) {
-    res.send(JSON.stringify({"author": "Dante Alighieri","title": "The Divine Comedy", "reviews": {} }, null,4));
-});
-
-public_users.get('/author/Unknown',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "The Epic Of Gilgamesh", "reviews": {} }, null,4));
-});
-
-public_users.get('/author/Unknown2',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "The Book Of Job", "reviews": {} }, null,4));
-});
-
-public_users.get('/author/Unknown3',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "One Thousand and One Nights", "reviews": {} }, null,4));
-});
-
-public_users.get('/author/Unknown4',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "NjSaga", "reviews": {} }, null,4));
-});
-
-public_users.get('/author/JaneAusten',function (req, res) {
-    res.send(JSON.stringify({"author": "Jane Austen","title": "Pride and Prejudice", "reviews": {} }, null,4));
-});
-
-public_users.get('/author/HonorédeBalzac',function (req, res) {
-    res.send(JSON.stringify({"author": "Honoré de Balzac","title": "Le Père Goriot", "reviews": {} }, null,4));
-});
-
-public_users.get('/author/SamuelBeckett',function (req, res) {
-    res.send(JSON.stringify({"author": "Samuel Beckett","title": "Molloy, Malone Dies, The Unnamable, the trilogy", "reviews": {} },null,4));
-});
-
-// Get all books based on title
-public_users.get('/title/ThingsFallApart',function (req, res) {
-    res.send(JSON.stringify({"author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} },null,4));
-});
-
-// Promise callback version : this model could be useful for all //
-
-
-fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/title/ThingsFallApart')
-.then(response => {
-    console.log(response.status);
-});
-
-
-public_users.get('/title/Fairytales',function (req, res) {
-    res.send(JSON.stringify({"author": "Hans Christian Andersen","title": "Fairy tales", "reviews": {} },null,4));
-});
-
-public_users.get('/title/TheDivineComedy',function (req, res) {
-    res.send(JSON.stringify({"author": "Dante Alighieri","title": "The Divine Comedy", "reviews": {} }, null,4));
-});
-
-public_users.get('/title/TheEpicOfGilgamesh',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "The Epic Of Gilgamesh", "reviews": {} }, null,4));
-});
-
-public_users.get('/title/TheBookOfJob',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "The Book Of Job", "reviews": {} }, null,4));
-});
-
-public_users.get('/title/OneThousandandOneNights',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "One Thousand and One Nights", "reviews": {} }, null,4));
-});
-
-public_users.get('/title/NjSaga',function (req, res) {
-    res.send(JSON.stringify({"author": "Unknown","title": "NjSaga", "reviews": {} }, null,4));
-});
-
-public_users.get('/title/PrideandPrejudice',function (req, res) {
-    res.send(JSON.stringify({"author": "Jane Austen","title": "Pride and Prejudice", "reviews": {} }, null,4));
-});
-
-public_users.get('/title/LePereGoriot',function (req, res) {
-    res.send(JSON.stringify({"author": "Honoré de Balzac","title": "Le Père Goriot", "reviews": {} }, null,4));
-});
-
-public_users.get('/title/MolloyMalone DiesThe Unnamablethetrilogy',function (req, res) {
-    res.send(JSON.stringify({"author": "Samuel Beckett","title": "Molloy, Malone Dies, The Unnamable, the trilogy", "reviews": {} },null,4));
-});
-
-//  Get book review
-public_users.get('/review/1',function (req, res) {
-    res.send(JSON.stringify({"reviews": {} },null,4));
-});
-
-// Promise callback version : this model could be useful for all //
-
-fetch('https://jeanjosephag-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/review/1')
-    .then(response => {
-        console.log(response.status);
-    });
-
-public_users.get('/review/2',function (req, res) {
-    res.send(JSON.stringify({"reviews": {} },null,4));
-
-});
-
-public_users.get('/review/3',function (req, res) {
-        res.send(JSON.stringify({"reviews": {} },null,4));
-
-    });
-
-public_users.get('/review/4',function (req, res) {
-        res.send(JSON.stringify({"reviews": {} },null,4));
-
-    });
-
-public_users.get('/review/5',function (req, res) {
-        res.send(JSON.stringify({"reviews": {} },null,4));
-
-    });
-
-public_users.get('/review/6',function (req, res) {
-        res.send(JSON.stringify({"reviews": {} },null,4));
-
-    });
-
-public_users.get('/review/7',function (req, res) {
-        res.send(JSON.stringify({"reviews": {} },null,4));
-
-    });
-
-public_users.get('/review/8',function (req, res) {
-        res.send(JSON.stringify({"reviews": {} },null,4));
-
-    });
-
-public_users.get('/review/9',function (req, res) {
-        res.send(JSON.stringify({"reviews": {} },null,4));
-
-    });
-
-public_users.get('/review/10',function (req, res) {
-        res.send(JSON.stringify({"reviews": {} },null,4));
-
-    });
+public_users.get('/review/:isbn', async function (req, res) {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const isbn = req.params.isbn;
+      res.send(books[isbn]["reviews"])
+    } catch (error) {
+      console.error("Error while getting book details:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
 
 module.exports.general = public_users;
