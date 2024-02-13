@@ -2,7 +2,7 @@ Coursera IBM Full Stack Courses
 
 Project Overview: Building a Secure REST API for Book Reviews
 
-I created a server-side book review application, my tasks were :
+I created a server-side book review application, my tasks were:
 
 - Authentication: Secure access using Session & JWT authentication.
 - API Endpoints: Implementing CRUD operations for book data.
