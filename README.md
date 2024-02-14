@@ -1,6 +1,6 @@
 # Coursera IBM Full Stack Courses
 
-I created a server-side book review application, my tasks were :
+I created a server-side book review application, my main tasks were :
 
 - Authentication: Secure access using Session & JWT authentication.
 - API Endpoints: Implementing CRUD operations for book data.
